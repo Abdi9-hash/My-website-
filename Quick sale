@@ -1,0 +1,223 @@
+import React, { useState, useMemo, Suspense } from "react";
+import Head from "next/head";
+import dynamic from "next/dynamic";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  Wand2,
+  Hammer,
+  Home as HomeIcon,
+  Users,
+  LogIn,
+  CreditCard,
+  Shield,
+  PlusCircle,
+  Smartphone,
+  Settings,
+  Globe,
+  Briefcase,
+  ImagePlus,
+  PhoneCall
+} from "lucide-react";
+
+const MapComponent = dynamic(() => import("./MapComponent"), {
+  ssr: false,
+  loading: () => <p>Loading map...</p>,
+});
+
+const services = [
+  {
+    icon: <HomeIcon className="w-8 h-8 text-blue-600" />, 
+    title: "House Cleaning",
+    description: "Get professional maids at your doorstep for deep cleaning and home care."
+  },
+  {
+    icon: <Hammer className="w-8 h-8 text-yellow-500" />,
+    title: "Carpentry & Repairs",
+    description: "From fixing broken furniture to full carpentry projects, we've got you covered."
+  },
+  {
+    icon: <Wand2 className="w-8 h-8 text-green-600" />,
+    title: "Quick Fixes",
+    description: "Hire trusted handymen for simple tasks like curtain rods, shelves, or bulb changes."
+  },
+  {
+    icon: <Users className="w-8 h-8 text-red-600" />,
+    title: "More Services",
+    description: "Plumbers, electricians, movers – anything you need at your doorstep."
+  }
+];
+
+const languages = {
+  en: {
+    welcome: "Your trusted partner for doorstep services",
+    adminControls: "Admin Controls",
+    manage: "Manage service requests, users, payments, and settings.",
+    book: "Book a Service",
+    pay: "Pay for Service",
+    mpesa: "Pay with Mpesa",
+    applyJob: "Apply for a Job",
+    addPhoto: "Add Photo",
+    callCustomer: "Call Customer",
+    callSupport: "Call Support"
+  },
+  sw: {
+    welcome: "Mshirika wako wa kuaminika kwa huduma za nyumbani",
+    adminControls: "Vifaa vya Msimamizi",
+    manage: "Simamia maombi ya huduma, watumiaji, malipo, na mipangilio.",
+    book: "Weka Huduma",
+    pay: "Lipa kwa Huduma",
+    mpesa: "Lipa kwa Mpesa",
+    applyJob: "Omba Kazi",
+    addPhoto: "Ongeza Picha",
+    callCustomer: "Piga Simu kwa Mteja",
+    callSupport: "Piga Simu kwa Usaidizi"
+  },
+  so: {
+    welcome: "Lamaanahaaga lagu kalsoon yahay ee adeegyada guriga",
+    adminControls: "Xulashooyinka Maamulka",
+    manage: "Maamul codsiyada adeegga, isticmaalayaasha, bixinta, iyo dejinta.",
+    book: "Dalbo Adeeg",
+    pay: "Bixi adeegga",
+    mpesa: "Bixi adigoo isticmaalaya Mpesa",
+    applyJob: "Codso Shaqo",
+    addPhoto: "Kudar Sawir",
+    callCustomer: "Wac Macmiilka",
+    callSupport: "Wac Taageero"
+  }
+};
+
+export default function HomeServiceHub() {
+  const [userRole, setUserRole] = useState("guest");
+  const [lang, setLang] = useState("en");
+  const t = languages[lang];
+
+  const handleUserLogin = () => setUserRole("user");
+  const handleAdminLogin = () => setUserRole("admin");
+  const handleMpesaPayment = () => alert("Processing Mpesa payment through 0793710243...");
+  const handleJobApplication = () => alert("Redirecting to job application form...");
+  const handleCallCustomer = () => alert("Calling customer...");
+  const handleAddPhoto = () => alert("Opening photo upload interface...");
+  const handleCallSupport = () => alert("Calling support at 0793710243...");
+
+  return (
+    <>
+      <Head>
+        <title>HomeService Hub</title>
+        <meta name="description" content="Book house help, repairs and more at your doorstep - like Uber for services" />
+        <meta name="keywords" content="Housemaid, Carpenter, Repairs, Home Services, Kenya, Mpesa, Kiswahili, Somali, Uber Services, HomeService Hub" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="robots" content="index, follow" />
+        <meta name="author" content="Abdimalik Adow" />
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="canonical" href="https://homeservicehub.com" />
+      </Head>
+
+      <div className="min-h-screen bg-gray-50 p-6">
+        <header className="text-center py-10">
+          <h1 className="text-4xl font-bold text-blue-800">HomeService Hub</h1>
+          <p className="text-gray-600 mt-2">{t.welcome}</p>
+        </header>
+
+        <div className="flex justify-center gap-4 mb-8 flex-wrap">
+          <Button onClick={handleUserLogin} className="bg-green-600 hover:bg-green-700 text-white">
+            <LogIn className="mr-2" /> User Login
+          </Button>
+          <Button onClick={handleAdminLogin} className="bg-gray-800 hover:bg-gray-900 text-white">
+            <Shield className="mr-2" /> Admin Panel
+          </Button>
+          <div className="flex items-center gap-2">
+            <Globe className="text-gray-500" />
+            <select
+              className="border px-2 py-1 rounded"
+              value={lang}
+              onChange={(e) => setLang(e.target.value)}
+            >
+              <option value="en">English</option>
+              <option value="sw">Kiswahili</option>
+              <option value="so">Somali</option>
+            </select>
+          </div>
+        </div>
+
+        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+          {services.map((service, idx) => (
+            <Card key={idx} className="rounded-2xl shadow-md hover:shadow-xl transition duration-300">
+              <CardContent className="p-6 text-center">
+                <div className="mb-4 flex justify-center">{service.icon}</div>
+                <h2 className="text-xl font-semibold mb-2">{service.title}</h2>
+                <p className="text-sm text-gray-500">{service.description}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </section>
+
+        {userRole === "user" && (
+          <div className="text-center mt-10 flex flex-col items-center gap-4">
+            <Button className="px-6 py-3 text-lg bg-blue-600 hover:bg-blue-700 text-white rounded-xl">
+              {t.book}
+            </Button>
+            <Button onClick={handleJobApplication} className="px-6 py-3 text-lg bg-orange-600 hover:bg-orange-700 text-white rounded-xl">
+              <Briefcase className="mr-2" /> {t.applyJob}
+            </Button>
+            <Button onClick={handleCallSupport} className="px-6 py-3 text-lg bg-gray-700 hover:bg-gray-800 text-white rounded-xl">
+              <PhoneCall className="mr-2" /> {t.callSupport}
+            </Button>
+          </div>
+        )}
+
+        {userRole === "admin" && (
+          <div className="text-center mt-10">
+            <h2 className="text-xl font-bold mb-2">{t.adminControls}</h2>
+            <p className="text-sm text-gray-600 mb-4">{t.manage}</p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Button className="bg-red-600 hover:bg-red-700 text-white">View Requests</Button>
+              <Button className="bg-yellow-600 hover:bg-yellow-700 text-white">Manage Payments</Button>
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                <PlusCircle className="mr-2" /> Add New Job
+              </Button>
+              <Button className="bg-gray-600 hover:bg-gray-700 text-white">
+                <Settings className="mr-2" /> Change Payment Options
+              </Button>
+              <Button className="bg-green-700 hover:bg-green-800 text-white">
+                <Shield className="mr-2" /> Secure System
+              </Button>
+              <Button onClick={handleAddPhoto} className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                <ImagePlus className="mr-2" /> {t.addPhoto}
+              </Button>
+              <Button onClick={handleCallCustomer} className="bg-teal-600 hover:bg-teal-700 text-white">
+                <PhoneCall className="mr-2" /> {t.callCustomer}
+              </Button>
+            </div>
+          </div>
+        )}
+
+        <div className="text-center mt-10">
+          <div className="flex flex-col items-center gap-4">
+            <Button className="flex items-center px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl">
+              <CreditCard className="mr-2" /> {t.pay}
+            </Button>
+            <Button onClick={handleMpesaPayment} className="flex items-center px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl">
+              <Smartphone className="mr-2" /> {t.mpesa}
+            </Button>
+          </div>
+        </div>
+
+        <div className="mt-16 max-w-6xl mx-auto">
+          <h2 className="text-xl font-bold text-center mb-4">User Locations (Live Map)</h2>
+          <div className="w-full h-96 rounded-xl overflow-hidden shadow-lg">
+            <Suspense fallback={<p>Loading map...</p>}>
+              <MapComponent />
+            </Suspense>
+          </div>
+        </div>
+
+        <footer className="mt-16 text-center text-sm text-gray-400">
+          &copy; {new Date().getFullYear()} HomeService Hub. All rights reserved.
+          <div>CEO: Abdimalik Adow</div>
+          <div>For work call <a href="tel:0793710243" className="text-blue-600">0793710243</a></div>
+        </footer>
+      </div>
+    </>
+  );
+}
