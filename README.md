@@ -31,3 +31,16 @@ const nextConfig = {
 };
 
 module.exports = nextConfig;
+import React, { useEffect } from "react";
+
+export default function MapComponent() {
+  useEffect(() => {
+    const map = document.createElement("div");
+    map.innerText = "🗺️ Live user map goes here (mocked for static)";
+    map.style.textAlign = "center";
+    map.style.padding = "2rem";
+    document.getElementById("map").appendChild(map);
+  }, []);
+
+  return <div id="map" />;
+}
