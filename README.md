@@ -44,3 +44,4 @@ export default function MapComponent() {
 
   return <div id="map" />;
 }
+npm install
