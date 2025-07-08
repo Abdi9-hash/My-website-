@@ -19,3 +19,15 @@
     "gh-pages": "^6.0.0"
   }
 }
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  output: 'export',
+  images: {
+    unoptimized: true,
+  },
+  reactStrictMode: true,
+  trailingSlash: true,
+  basePath: "/home-service-hub"
+};
+
+module.exports = nextConfig;
